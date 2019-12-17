@@ -1,0 +1,15 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix alg: <http://drakon.su/ADF#>.
+
+<e:nop> rdf:type alg:Algorithm; rdfs:label "No-Operation Algorithm";
+	alg:start <e:nop-start>; alg:end <e:nop-end>.
+<e:nop-start> rdf:type alg:AlgorithmStart; rdfs:label "Start".
+<e:nop-end> rdf:type alg:AlgorithmEnd; rdfs:label "End".
+<e:nop-start> alg:next <e:nop-end>.
+
+<e:nop1> rdf:type alg:Algorithm; rdfs:label "No-Operation Algorithm with empty query";
+	 alg:start <e:nop1-start>; alg:end <e:nop1-end>.
+<e:nop1-start> rdf:type alg:AlgorithmStart; rdfs:label "Start".
+<e:nop1-end> rdf:type alg:AlgorithmEnd; rdfs:label "End".
+<e:nop1-start> alg:next [rdf:type alg:query; rdfs:label "Question"; alg:yes <e:nop1-end>; alg:no <e:nop1-end>; alg:downpath alg:yes].
