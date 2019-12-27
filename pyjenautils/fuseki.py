@@ -14,6 +14,7 @@ class FusekiConnection:
         
         results = qexec.execSelect()
         res = conversions.rq_select_results_to_ulb_dataframe(results, convert_to_python)
+        qexec.close()
         return res
 
     def update(self, rq, initial_binding = None):
