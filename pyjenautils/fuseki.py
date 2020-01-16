@@ -22,12 +22,15 @@ class FusekiConnection:
         except jnius.JavaException as e:
             raise exception.PyJenaUtilsException(e, "FusekiConnection::select failed")
 
-    def construct(self, rq, initial_binding = None, convert_to_python = False):
+    def construct(self, rq, initial_binding = None, convert_to_python = True):
         pss = conversions.create_parametrized_query(rq, initial_binding)
         rq = pss.asQuery()
-        res_model = self.conn.queryConstruct(rq)
-        g = jg.JenaGraph(res_model)
-        return g.triples(None, None, None)
+        qexec = self.conn.query(rq)
+                
+        res_model = qexec.execConstruct()
+        res = jg.JenaGraph(res_model).triples(None, None, None) if convert_to_python else res_model
+        qexec.close()
+        return res
     
     def update(self, rq, initial_binding = None):
         pss = conversions.create_parametrized_query(rq, initial_binding)

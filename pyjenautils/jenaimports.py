@@ -1,5 +1,8 @@
 import os, jnius_config
-jnius_config.set_classpath(os.path.join(os.getenv("JENA_HOME"), "lib/*"))
+jnius_pathes = []
+jnius_pathes.append(os.path.join(os.getenv("JENA_HOME"), "lib/*"))
+jnius_pathes.append(os.path.join(os.getenv("SHACL_HOME"), "lib/*"))
+jnius_config.set_classpath(*jnius_pathes)
 import jnius
 
 System = jnius.autoclass('java.lang.System')
@@ -21,3 +24,5 @@ XSDDatatype = jnius.autoclass('org.apache.jena.datatypes.xsd.XSDDatatype')
 
 RDFConnectionFuseki = jnius.autoclass('org.apache.jena.rdfconnection.RDFConnectionFuseki')
 ParameterizedSparqlString = jnius.autoclass('org.apache.jena.query.ParameterizedSparqlString')
+
+ValidationUtil = jnius.autoclass('org.topbraid.shacl.validation.ValidationUtil')
