@@ -1,7 +1,7 @@
 import fuargs
 import sys, time
 sys.path.append("..")
-from pyjenautils import fuseki
+from pyjenautils import fuseki, prefix
 
 @fuargs.action
 def test():
@@ -15,10 +15,11 @@ def test():
 
 @fuargs.action
 def test_insert(v):
-    conn = fuseki.FusekiConnection("http://localhost:3030/testdb")    
-    rq = 'insert { graph <testdb:shacl-defs> { ?s <testdb:test> "%s" } } where { bind(<testdb:aaa> as ?s) }' % v
+    conn = fuseki.FusekiConnection("http://localhost:3030/testdb")
+    prefix.set_base_uri("testdb:")
+    rq = 'insert { graph <shacl-defs> { ?s <test> "%s" } } where { bind(<aaa> as ?s) }' % v
     conn.update(rq)
-    rq = 'select * from <testdb:shacl-defs> { ?s <testdb:test> ?o }'
+    rq = 'select * from <shacl-defs> { ?s <test> ?o }'
     df = conn.select(rq)
     print df
         

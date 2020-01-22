@@ -120,7 +120,7 @@ def rq_select_results_to_ulb_dataframe(results, convert_to_python):
 
 def create_parametrized_query(rq, initial_binding):
     pss = ji.ParameterizedSparqlString()
-    for k, v in prefix.dflt_prefixes.items():
+    for k, v in prefix.DFLT_PREFIXES.items():
         pss.setNsPrefix(k, v)
     if initial_binding:
         for k, v in initial_binding.items():
@@ -132,7 +132,11 @@ def create_parametrized_query(rq, initial_binding):
             elif isinstance(v, j.L):
                 pss.setLiteral(k, v.jena_literal)
             else:
-                raise Exception("unknown value type for value %s" % v)                
+                raise Exception("unknown value type for value %s" % v)
+
+    if prefix.BASE_URI[0] != None:
+        rq = 'base <' + prefix.BASE_URI[0] + '>\n' + rq
+    #print "after conversion:", rq
     pss.setCommandText(rq)
 
     return pss
