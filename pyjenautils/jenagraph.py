@@ -18,6 +18,9 @@ class JenaGraph:
         self.g.write(out_w, format)
         out_w.close()
 
+    def add_triple(self, *ulb_triple):
+        self.g.add(conversions.ULB_triple_to_jena_statement(ulb_triple))
+        
     def add_triples(self, ulb_triples):
         self.g.add([conversions.ULB_triple_to_jena_statement(x) for x in ulb_triples])
 

@@ -12,6 +12,9 @@ def python_value_to_jena_literal__(v):
         ret = ji.ResourceFactory.createStringLiteral(v)
     elif isinstance(v, datetime.datetime):
         ret = ji.ResourceFactory.createTypedLiteral(v, ji.XSDDatatype.XSDdateTime)
+    elif isinstance(v, bool):
+        #ipdb.set_trace()
+        ret = ji.ResourceFactory.createTypedLiteral("true" if v else "false", ji.XSDDatatype.XSDboolean)
     else:
         ret = ji.ResourceFactory.createTypedLiteral(v)
     return ret
