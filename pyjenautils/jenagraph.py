@@ -18,6 +18,12 @@ class JenaGraph:
         self.g.write(out_w, format)
         out_w.close()
 
+    def change_subject(self, subject_U, new_subject_U):
+        subj_triples = self.triples(subject_U, None, None)
+        new_subj_triples = [(new_subject_U, p, o) for s, p, o in subj_triples]
+        self.remove_triples(subj_triples)
+        self.add_triples(new_subj_triples)
+        
     def add_triple(self, *ulb_triple):
         self.g.add(conversions.ULB_triple_to_jena_statement(ulb_triple))
         

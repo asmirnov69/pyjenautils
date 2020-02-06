@@ -1,3 +1,4 @@
+#import ipdb
 import jenaimports as ji
 import jenagraph as jg
 import conversions
@@ -12,17 +13,18 @@ class FusekiConnection:
     def select(self, rq, initial_binding = None, convert_to_python = False):
         try:
             pss = conversions.create_parametrized_query(rq, initial_binding)
-            rq = pss.asQuery()        
-            qexec = self.conn.query(rq)
+            prq = pss.asQuery()        
+            qexec = self.conn.query(prq)
         
             results = qexec.execSelect()
             res = conversions.rq_select_results_to_ulb_dataframe(results, convert_to_python)
             qexec.close()
             return res
         except jnius.JavaException as e:
-            raise exception.PyJenaUtilsException(e, "FusekiConnection::select failed")
+            raise e
+            #raise exception.PyJenaUtilsException(e, "FusekiConnection::select failed\n" + e.__repr__())
 
-    def construct(self, rq, initial_binding = None, convert_to_python = True):
+    def construct(self, rq, initial_binding = None, convert_to_python = False):
         pss = conversions.create_parametrized_query(rq, initial_binding)
         rq = pss.asQuery()
         qexec = self.conn.query(rq)
@@ -42,5 +44,11 @@ class FusekiConnection:
             self.conn.load(g_uri, m.g)
         else:
             self.conn.load(m.g)
+
+    def write_graph(self, g, g_uri, append):
+        if append:
+            self.conn.load(g_uri.get().getURI(), g.g)
+        else:
+            self.conn.put(g_uri.get().getURI(), g.g)
             
 
